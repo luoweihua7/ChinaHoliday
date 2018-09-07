@@ -1,0 +1,24 @@
+{
+  "name": "chinaholiday",
+  "version": "1.0.0",
+  "description": "Convert chinese holidays to iCal format",
+  "main": "index.js",
+  "dependencies": {
+    "ics": "^2.7.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "node index"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/luoweihua7/ChinaHoliday.git"
+  },
+  "author": "luoweihua7",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/luoweihua7/ChinaHoliday/issues"
+  },
+  "homepage": "https://github.com/luoweihua7/ChinaHoliday#readme"
+}
