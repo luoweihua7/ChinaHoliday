@@ -15,11 +15,8 @@ class ChinaHolidy {
 		Object.keys(holidayMap).forEach(fileName => {
 			let events = holidayMap[fileName];
 			this.transform(events).then(cal => {
-				const HOLIDAY_COLOR = '#FF6A6A'; // 假期颜色，苹果设备上可用
-				const WEEKDAY_COLOR = '#969799'; // 上班颜色，同上
-
-				fs.writeFileSync(path.join(this.targetPath, fileName.replace(path.extname(fileName), '.ics')), cal.replace(/DESCRIPTION:(.*)/g, (match, type) => {
-					return `X-APPLE-CALENDAR-COLOR:${type == 'HOLIDAY' ? HOLIDAY_COLOR : WEEKDAY_COLOR}`
+				fs.writeFileSync(path.join(this.targetPath, fileName.replace(path.extname(fileName), '.ics')), cal.replace(/VERSION:(.*)/g, (match, type) => {
+					return `${match}\nX-APPLE-CALENDAR-COLOR:#FF6A6A`
 				}))
 			}).catch(e => {
 				console.error(e);
