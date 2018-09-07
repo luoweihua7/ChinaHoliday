@@ -15,7 +15,12 @@ class ChinaHolidy {
 		Object.keys(holidayMap).forEach(fileName => {
 			let events = holidayMap[fileName];
 			this.transform(events).then(cal => {
-				fs.writeFileSync(path.join(this.targetPath, fileName.replace(path.extname(fileName), '.ics')), cal)
+				const HOLIDAY_COLOR = '#FF6A6A'; // 假期颜色，苹果设备上可用
+				const WEEKDAY_COLOR = '#969799'; // 上班颜色，同上
+
+				fs.writeFileSync(path.join(this.targetPath, fileName.replace(path.extname(fileName), '.ics')), cal.replace(/DESCRIPTION:(.*)/g, (match, type) => {
+					return `X-APPLE-CALENDAR-COLOR:${type == 'HOLIDAY' ? HOLIDAY_COLOR : WEEKDAY_COLOR}`
+				}))
 			}).catch(e => {
 				console.error(e);
 			})
@@ -64,11 +69,11 @@ class ChinaHolidy {
 					const weekday = monthData.weekday || [];
 
 					holiday.forEach(day => {
-						events.push({ title: '放假', start: [year, month, Number(day), 0, 0], duration: { days: 1 }, status: 'CONFIRMED' })
+						events.push({ title: '放假', start: [year, month, Number(day), 0, 0], duration: { days: 1 }, description: 'HOLIDAY', status: 'CONFIRMED' })
 					});
 
 					weekday.forEach(day => {
-						events.push({ title: '上班', start: [year, month, Number(day), 0, 0], duration: { days: 1 }, status: 'CONFIRMED' })
+						events.push({ title: '上班', start: [year, month, Number(day), 0, 0], duration: { days: 1 }, description: 'WEEKDAY', status: 'CONFIRMED' })
 					});
 				})
 			})
