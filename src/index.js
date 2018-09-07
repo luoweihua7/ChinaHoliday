@@ -64,12 +64,11 @@ class ChinaHolidy {
 					const weekday = monthData.weekday || [];
 
 					holiday.forEach(day => {
-						// GTM8
-						events.push({ title: '放假', start: [year, month, Number(day), 8, 0], duration: { days: 1 }, status: 'CONFIRMED' })
+						events.push({ title: '放假', start: [year, month, Number(day), 0, 0], duration: { days: 1 }, status: 'CONFIRMED' })
 					});
 
 					weekday.forEach(day => {
-						events.push({ title: '上班', start: [year, month, Number(day), 8, 0], duration: { days: 1 }, status: 'CONFIRMED' })
+						events.push({ title: '上班', start: [year, month, Number(day), 0, 0], duration: { days: 1 }, status: 'CONFIRMED' })
 					});
 				})
 			})
