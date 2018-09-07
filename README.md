@@ -1,6 +1,9 @@
 # ChinaHoliday
 转换JSON格式的国内放假日历到iCal格式，方便日历App订阅等操作
 
+# 预览
+![预览](./images/preview.png)
+
 # 使用
 先安装依赖，然后执行 `build` 构建生成
 ```
