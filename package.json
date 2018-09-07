@@ -4,7 +4,8 @@
   "description": "Convert chinese holidays to iCal format",
   "main": "index.js",
   "dependencies": {
-    "ics": "^2.7.2"
+    "ical-toolkit": "^1.0.9",
+    "uuid": "^3.3.2"
   },
   "devDependencies": {},
   "scripts": {

@@ -1,6 +1,7 @@
 // const pify =require('pify')
 
-const ics = require('ics')
+const iCalTookit = require('ical-toolkit')
+const uuid = require('uuid/v4')
 const path = require('path')
 const fs = require('fs')
 
@@ -14,12 +15,11 @@ class ChinaHolidy {
 
 		Object.keys(holidayMap).forEach(fileName => {
 			let events = holidayMap[fileName];
+
 			this.transform(events).then(cal => {
-				fs.writeFileSync(path.join(this.targetPath, fileName.replace(path.extname(fileName), '.ics')), cal.replace(/VERSION:(.*)/g, (match, type) => {
-					return `${match}\nX-APPLE-CALENDAR-COLOR:#FF6A6A`
-				}))
+				fs.writeFileSync(path.join(this.targetPath, fileName.replace(path.extname(fileName), '.ics')), cal)
 			}).catch(e => {
-				console.error(e);
+				console.error(`转换失败：${e && e.message}`);
 			})
 		})
 	}
@@ -66,11 +66,29 @@ class ChinaHolidy {
 					const weekday = monthData.weekday || [];
 
 					holiday.forEach(day => {
-						events.push({ title: '放假', start: [year, month, Number(day), 0, 0], duration: { days: 1 }, description: 'HOLIDAY', status: 'CONFIRMED' })
+						events.push({
+							uid: uuid(),
+							summary: '放假',
+							start: new Date(year, month - 1, Number(day), 8), // 要加8小时，ical-toolkit时间转换用的是getUTCDate
+							end: new Date(year, month - 1, Number(day) + 1, 8),
+							allDay: true,
+							description: 'HOLIDAY',
+							transp: 'OPAQUE',
+							status: 'CONFIRMED'
+						})
 					});
 
 					weekday.forEach(day => {
-						events.push({ title: '上班', start: [year, month, Number(day), 0, 0], duration: { days: 1 }, description: 'WEEKDAY', status: 'CONFIRMED' })
+						events.push({
+							uid: uuid(),
+							summary: '上班',
+							start: new Date(year, month - 1, Number(day), 8),
+							end: new Date(year, month - 1, Number(day) + 1, 8),
+							allDay: true,
+							description: '调假',
+							transp: 'OPAQUE',
+							status: 'CONFIRMED'
+						})
 					});
 				})
 			})
@@ -82,14 +100,19 @@ class ChinaHolidy {
 	}
 
 	transform(events) {
-		return new Promise((resolve, reject) => {
-			ics.createEvents(events, (err, value) => {
-				if (!err) {
-					resolve(value)
-				} else {
-					reject(err);
-				}
-			})
+		return new Promise(resolve => {
+			let builder = iCalTookit.createIcsFileBuilder();
+			builder.spacers = false;
+			builder.throwError = true;
+
+			builder.calname = "放假安排";
+			builder.timezone = 'Asia/Shanghai';
+			builder.method = 'publish';
+			builder.additionalTags = { "X-APPLE-CALENDAR-COLOR": "#F0FFFF" };
+
+			events.forEach(event => builder.events.push(event));
+
+			resolve(builder.toString());
 		})
 	}
 }
