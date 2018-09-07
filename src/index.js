@@ -108,7 +108,7 @@ class ChinaHolidy {
 			builder.calname = "放假安排";
 			builder.timezone = 'Asia/Shanghai';
 			builder.method = 'publish';
-			builder.prodid = 'ChinaHoliday';
+			builder.prodid = 'china-holiday-cn'; // 这个必须得三段，否则在iPhone上可能看不到日历。分别表示company-product-language
 			builder.additionalTags = { "X-APPLE-CALENDAR-COLOR": "#CC73E1" };
 
 			events.forEach(event => builder.events.push(event));
