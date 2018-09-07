@@ -108,7 +108,7 @@ class ChinaHolidy {
 			builder.calname = "放假安排";
 			builder.timezone = 'Asia/Shanghai';
 			builder.method = 'publish';
-			builder.additionalTags = { "X-APPLE-CALENDAR-COLOR": "#EE6363" };
+			builder.additionalTags = { "X-APPLE-CALENDAR-COLOR": "#CC73E1" };
 
 			events.forEach(event => builder.events.push(event));
 
